@@ -40,6 +40,27 @@ app.get('/todos/:id', (req, res) => {
     .catch(error => console.log(error))
 })
 
+app.get('/todos/:id/edit', (req, res) => {
+  const id = req.params.id
+  return Todo.findById(id)
+    .lean()
+    .then((todo) => res.render('edit', { todo }))
+    .catch(error => console.log(error))
+})
+
+app.post('/todo/:id', (req, res) => {
+  const id = req.params.id
+  name = req.body.name
+  return Todo.findById(id)
+    .then((todo) => {
+      todo.name = name
+      todo.save()
+    })
+    .then(() => res.redirect(`/todos/${id}/edit`))
+    .catch(error => console.log(error))
+})
+
+
 
 // 取得 mongoose.connect() 連上的默認 Connection object
 const db = mongoose.connection
@@ -54,9 +75,6 @@ db.once('open', () => {
   console.log('mongodb connected!')
 })
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
 
 app.listen(3000, () => {
   console.log('app is running on http://localhost:3000.')
