@@ -1,8 +1,19 @@
 const express = require('express')
-const app = express()
 const mongoose = require('mongoose')
+const exphbs = require('express-handlebars')
 
-mongoose.connect('mongodb://localhost/todo-list')
+mongoose.connect('mongodb://localhost/todo-list', { useNewUrlParser: true, useUnifiedTopology: true })
+
+const app = express()
+
+// add hbs to application list
+app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
+// enable hbs this application
+app.set('view engine', 'hbs')
+
+app.get('/', (req, res) => {
+  res.render('index')
+})
 
 const db = mongoose.connection
 
