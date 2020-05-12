@@ -6,4 +6,5 @@ const todoSchema = new Schema({
     required: true
   }
 })
-module.exports = mongoose.model('Todo', todoSchema)
+// 以後使用Todo來代表 todoSchema
+module.exports = mongoose.model('Todo', todoSchema) 
