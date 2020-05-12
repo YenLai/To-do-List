@@ -1,11 +1,13 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const exphbs = require('express-handlebars')
+const bodyParser = require('body-parser')
 const Todo = require('./models/todo')
 
 mongoose.connect('mongodb://localhost/todo-list', { useNewUrlParser: true, useUnifiedTopology: true })
 
 const app = express()
+app.use(bodyParser.urlencoded({ extended: true }))
 
 // add hbs to application list
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
@@ -19,6 +21,18 @@ app.get('/', (req, res) => {
     .catch(error => console.error(error))
 })
 
+app.get('/todos/new', (req, res) => {
+  res.render('new')
+})
+
+app.post('/todos', (req, res) => {
+  const name = req.body.name       // 從 req.body 拿出表單裡的 name 資料
+  return Todo.create({ name })     // 存入資料庫
+    .then(() => res.redirect('/')) // 新增完成後導回首頁
+    .catch(error => console.log(error))
+})
+
+// 取得 mongoose.connect() 連上的默認 Connection object
 const db = mongoose.connection
 
 //db.on => register a listener to monitor if there is error 
