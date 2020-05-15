@@ -1,11 +1,11 @@
 const express = require('express')
-const mongoose = require('mongoose')
 const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
 const methodOverride = require('method-override')
+
 const routes = require('./routes')
 
-mongoose.connect('mongodb://localhost/todo-list', { useNewUrlParser: true, useUnifiedTopology: true })
+require('./config/mongoose')
 
 const app = express()
 app.use(bodyParser.urlencoded({ extended: true }))
